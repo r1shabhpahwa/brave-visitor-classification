@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#222831",
+          DEFAULT: "#292929",
           50: "#E7EAEE",
           100: "#CCD2DB",
           200: "#9CA8BA",
@@ -35,6 +35,7 @@ module.exports = {
         },
         neutral: {
           DEFAULT: "#EEEEEE",
+          grey: "#454545",
         },
       },
     },

@@ -149,11 +149,11 @@ const SearchSection = () => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 1.15 }}
                         key={index}
-                        className="bg-neutral w-max rounded-full hover:bg-neutral-300 dark:bg-primary-400 dark:hover:bg-primary-300"
+                        className="bg-primary-400 hover:bg-primary-300 dark:bg-secondary w-max rounded-full dark:hover:bg-secondary-400 "
                       >
                         <a href={social.link} target="_blank" rel="noopener noreferrer">
                           <img
-                            className="h-14 w-14 p-4 transition-all dark:invert"
+                            className="h-14 w-14 p-4 transition-all invert"
                             src={social.logo}
                             alt={social.alt}
                           />

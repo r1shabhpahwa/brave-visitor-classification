@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import images from "../../constants/image";
 import { MoonIcon, SunIcon } from "@heroicons/react/solid";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
@@ -7,7 +6,7 @@ import useDarkMode from "../../hooks/useDarkMode";
 const navlinks = [
   {
     name: "Repository",
-    href: "https://github.com/r1shabhpahwa",
+    href: "https://github.com/r1shabhpahwa/visitor-classification",
   },
   {
     name: "Contact Me",
@@ -58,8 +57,8 @@ export default function NavBar() {
                 href={navlink.href}
                 className={
                   navlink.href
-                    ? "text-base font-medium text-primary relative before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:transition before:bg-primary hover:before:scale-x-100 dark:hover:text-neutral dark:text-white dark:before:bg-secondary-400"
-                    : "text-base font-medium text-primary relative dark:text-white dark:before:bg-secondary-400 cursor-not-allowed"
+                    ? "text-base font-medium text-primary relative before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:transition before:bg-primary hover:before:scale-x-100 dark:hover:text-neutral dark:text-white dark:before:bg-secondary"
+                    : "text-base font-medium text-primary relative dark:text-white dark:before:bg-secondary cursor-not-allowed"
                 }
               >
                 {navlink.name}

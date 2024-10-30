@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import React, { useState, useEffect } from "react";
-import { MoonIcon, SunIcon } from "@heroicons/react/solid";
+import { MoonIcon, SunIcon, MenuIcon, XIcon } from "@heroicons/react/solid";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
 import { setQuestions, setLoading, setError } from '../../questionsSlice';
@@ -21,6 +21,7 @@ export default function NavBar() {
   const handleMode = () => setDarkTheme(!darkTheme);
   const dispatch = useDispatch();
   const [addBlur, setAddBlur] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const addBlurScroll = () => {
     if (window.scrollY >= 100) {
@@ -63,7 +64,7 @@ export default function NavBar() {
 
   return (
     <div
-      className={` ${
+      className={`${
         addBlur && "drop-shadow-lg backdrop-blur-md"
       } fixed top-0 w-full z-[100] transition-all duration-300`}
     >
@@ -74,7 +75,20 @@ export default function NavBar() {
         transition={{ type: "linear", duration: 0.5 }}
         className="container"
       >
-        <div className="flex justify-end items-center px-0 py-4 gap-4 sm:px-6 lg:py-8 lg:gap-10">
+        <div className="flex justify-between items-center px-4 py-4 sm:px-6 lg:py-8 lg:gap-10">
+          {/* Hamburger Icon for Mobile View */}
+          <button
+            className="lg:hidden text-primary dark:text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <XIcon className="h-6 w-6" />
+            ) : (
+              <MenuIcon className="h-6 w-6" />
+            )}
+          </button>
+
+          {/* Desktop Navigation Links */}
           <nav className="hidden space-x-6 lg:flex lg:space-x-10">
             {navlinks.map((navlink) => (
               <a
@@ -96,6 +110,8 @@ export default function NavBar() {
               Download Response
             </button>
           </nav>
+
+          {/* Dark Mode Toggle */}
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -112,7 +128,7 @@ export default function NavBar() {
               },
             }}
             whileTap={{ y: -5 }}
-            className="text-primary hidden transition-opacity lg:block dark:text-white"
+            className="text-primary transition-opacity lg:block dark:text-white"
             onClick={handleMode}
           >
             {darkTheme ? (
@@ -122,6 +138,27 @@ export default function NavBar() {
             )}
           </motion.div>
         </div>
+
+        {/* Mobile Navigation Links */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden flex flex-col items-start space-y-4 px-4 pt-4 pb-2">
+            {navlinks.map((navlink) => (
+              <a
+                key={navlink.name}
+                href={navlink.href}
+                className="text-base font-medium text-primary dark:text-white"
+              >
+                {navlink.name}
+              </a>
+            ))}
+            <button
+              onClick={handleGetCsv}
+              className="text-base font-medium text-primary dark:text-white"
+            >
+              Download Response
+            </button>
+          </div>
+        )}
       </motion.div>
     </div>
   );

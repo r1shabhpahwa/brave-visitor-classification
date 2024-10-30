@@ -60,7 +60,7 @@ def preprocess_text(text):
     preprocessed_text = ' '.join(tokens)
     return preprocessed_text
 
-def extract_keywords(text, num_keywords=10):
+def extract_keywords(text, num_keywords=20):
     """
     Extracts keywords from the text using KeyBERT.
     """

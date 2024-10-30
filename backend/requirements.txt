@@ -1,0 +1,7 @@
+nltk~=3.9.1
+requests~=2.32.3
+beautifulsoup4~=4.12.3
+Flask~=3.0.3
+keybert~=0.8.5
+openai~=1.52.2
+Flask-Cors~=5.0.0

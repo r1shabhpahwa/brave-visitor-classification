@@ -13,8 +13,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/generate-questions": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173" ]},
-    r"/save-responses": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173"]}
+    r"/generate-questions": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173", "http://brave.p1xelhub.xyz"]},
+    r"/save-responses": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173", "http://brave.p1xelhub.xyz"]},
+    r"/get-csv": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173", "http://brave.p1xelhub.xyz"]}
 },
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"])

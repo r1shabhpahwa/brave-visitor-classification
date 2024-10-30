@@ -3,16 +3,21 @@ import re
 
 import nltk
 import requests
+import csv
 from bs4 import BeautifulSoup
 from flask import Flask, request, jsonify
 from keybert import KeyBERT
 from openai import OpenAI
 from flask_cors import CORS
+from datetime import datetime
 
 app = Flask(__name__)
-CORS(app, resources={r"/generate-questions": {"origins": "http://localhost:5173"}},
-     methods=["GET", "POST", "OPTIONS"],
-     allow_headers=["Content-Type", "Authorization"])
+CORS(app, resources={
+    r"/generate-questions": {"origins": "http://localhost:5173"},
+    r"/save-responses": {"origins": "http://localhost:5173"}
+},
+    methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"])
 
 
 app = Flask(__name__)
@@ -147,6 +152,44 @@ def generate_questions():
 
     questions_list = parse_questions_to_json(questions_text)
     response = jsonify(questions_list)
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    return response, 200
+
+
+@app.route('/save-responses', methods=['POST', 'OPTIONS'])
+def save_responses():
+    if request.method == 'OPTIONS':
+        # Properly handle CORS preflight request
+        response = jsonify()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response, 200
+
+    data = request.get_json()
+    responses = data.get('responses')
+
+    if not responses:
+        return jsonify({"error": "Responses are required"}), 400
+
+    file_exists = os.path.isfile('responses.csv')
+    with open('responses.csv', mode='a', newline='') as file:
+        fieldnames = ['timestamp', 'question', 'response']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        # Write the header only if the file is new
+        if not file_exists:
+            writer.writeheader()
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for response in responses:
+            writer.writerow({
+                'timestamp': timestamp,
+                'question': response.get('question'),
+                'response': response.get('response')
+            })
+
+    response = jsonify({"message": "Responses saved successfully"})
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
     return response, 200
 

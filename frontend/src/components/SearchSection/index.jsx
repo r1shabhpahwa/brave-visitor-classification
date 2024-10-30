@@ -38,7 +38,7 @@ const SearchSection = () => {
         dispatch(setLoading(true));
         setCurrentQuestionIndex(0); // Reset the question index
         setResponses([]); // Clear previous responses
-        setURL();
+        setURL('');
         try {
           const response = await axios.post('http://localhost:5000/generate-questions', { url: url });
           dispatch(setQuestions(response.data));

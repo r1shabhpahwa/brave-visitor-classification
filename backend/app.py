@@ -7,6 +7,13 @@ from bs4 import BeautifulSoup
 from flask import Flask, request, jsonify
 from keybert import KeyBERT
 from openai import OpenAI
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app, resources={r"/generate-questions": {"origins": "http://localhost:5173"}},
+     methods=["GET", "POST", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"])
+
 
 app = Flask(__name__)
 
@@ -111,8 +118,16 @@ def parse_questions_to_json(input_text):
 
     return questions_list
 
-@app.route('/generate-questions', methods=['POST'])
+@app.route('/generate-questions', methods=['POST', 'OPTIONS'])
 def generate_questions():
+    if request.method == 'OPTIONS':
+        # Properly handle CORS preflight request
+        response = jsonify()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response, 200
+
     data = request.get_json()
     url = data.get('url')
 
@@ -131,7 +146,9 @@ def generate_questions():
         return jsonify({"error": "Failed to generate questions"}), 500
 
     questions_list = parse_questions_to_json(questions_text)
-    return jsonify(questions_list), 200
+    response = jsonify(questions_list)
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    return response, 200
 
 if __name__ == "__main__":
     app.run(debug=True)

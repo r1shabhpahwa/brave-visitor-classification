@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply font-default;
+  }
+
+  body * {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+
+  html, body {
+    @apply overflow-x-hidden;
+  }
+}
+
+@layer components {
+  .url-bar {
+    @apply bg-white dark:bg-gray-800 text-gray-900 font-default dark:text-white rounded-full border border-transparent shadow-md pl-6 pr-12 py-4 w-full max-w-7xl hover:border-blue-500;
+  }
+
+  .submit-button {
+    @apply flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full text-white absolute right-3.5 top-1/2 transform -translate-y-1/2 hover:bg-blue-600;
+  }
+
+  .question-block-container {
+    @apply bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-2xl;
+  }
+
+  .question-text-container {
+    @apply text-lg font-bold text-gray-900 dark:text-white mb-4;
+  }
+
+  .options-list-container {
+    @apply flex flex-col gap-4;
+  }
+
+  .option-item-container {
+    @apply w-full;
+  }
+
+  .option-button-container {
+    @apply w-full h-12 flex items-center justify-center rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all border border-blue-500;
+  }
+}
+
+@layer components {
+  .loading-wrapper {
+    @apply w-full h-full fixed top-0 left-0 bg-primary grid items-center transition-all delay-300;
+  }
+
+  .loading {
+    @apply animate-spin border-8 rounded-full border-solid border-neutral w-[140px] h-[140px] transition-all delay-300;
+  }
+}

@@ -43,6 +43,7 @@ def preprocess_text(text):
     Preprocesses the text by tokenizing, removing stop words, and non-alphabetic characters.
     """
     nltk.download('punkt')
+    nltk.download('punkt_tab')
     nltk.download('stopwords')
     from nltk.corpus import stopwords
     from nltk.tokenize import word_tokenize

@@ -40,7 +40,7 @@ const SearchSection = () => {
         setResponses([]); // Clear previous responses
         setURL('');
         try {
-          const response = await axios.post('http://localhost:5000/generate-questions', { url: url });
+          const response = await axios.post('http://brave-backend.p1xelhub.xyz:5000/generate-questions', { url: url });
           dispatch(setQuestions(response.data));
           setShowQuestions(true);
           setShowSearch(false);
@@ -65,7 +65,7 @@ const SearchSection = () => {
         setSavingResponses(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000)); // Ensure spinner shows for at least 1 second
-            await axios.post('http://localhost:5000/save-responses', { responses });
+            await axios.post('http://brave-backend.p1xelhub.xyz:5000/save-responses', { responses });
         } catch (err) {
             console.error('Failed to save responses:', err);
         } finally {

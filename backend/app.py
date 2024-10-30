@@ -19,6 +19,8 @@ CORS(app, resources={
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"])
 
+ALLOWED_ORIGINS = ["http://localhost:5173", "http://brave.p1xelhub.xyz", "https://brave.p1xelhub.xyz"]
+
 app = Flask(__name__)
 
 def scrape_content(url):
@@ -125,10 +127,12 @@ def parse_questions_to_json(input_text):
 
 @app.route('/generate-questions', methods=['POST', 'OPTIONS'])
 def generate_questions():
+    origin = request.headers.get('Origin')
     if request.method == 'OPTIONS':
         # Properly handle CORS preflight request
         response = jsonify()
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+        if origin in ALLOWED_ORIGINS:
+            response.headers.add('Access-Control-Allow-Origin', origin)
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         return response, 200
@@ -152,16 +156,19 @@ def generate_questions():
 
     questions_list = parse_questions_to_json(questions_text)
     response = jsonify(questions_list)
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    if origin in ALLOWED_ORIGINS:
+        response.headers.add('Access-Control-Allow-Origin', origin)
     return response, 200
 
 
 @app.route('/save-responses', methods=['POST', 'OPTIONS'])
 def save_responses():
+    origin = request.headers.get('Origin')
     if request.method == 'OPTIONS':
         # Properly handle CORS preflight request
         response = jsonify()
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+        if origin in ALLOWED_ORIGINS:
+            response.headers.add('Access-Control-Allow-Origin', origin)
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         return response, 200
@@ -190,7 +197,8 @@ def save_responses():
             })
 
     response = jsonify({"message": "Responses saved successfully"})
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    if origin in ALLOWED_ORIGINS:
+        response.headers.add('Access-Control-Allow-Origin', origin)
     return response, 200
 
 if __name__ == "__main__":

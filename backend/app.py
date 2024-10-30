@@ -13,8 +13,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/generate-questions": {"origins": ["http://localhost:5173", "https://brave.p1xelhub.xyz"]},
-    r"/save-responses": {"origins": ["http://localhost:5173", "https://brave.p1xelhub.xyz"]}
+    r"/generate-questions": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173" ]},
+    r"/save-responses": {"origins": ["https://brave.p1xelhub.xyz", "http://localhost:5173"]}
 },
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"])
@@ -128,6 +128,7 @@ def parse_questions_to_json(input_text):
 @app.route('/generate-questions', methods=['POST', 'OPTIONS'])
 def generate_questions():
     origin = request.headers.get('Origin')
+    print(origin)
     if request.method == 'OPTIONS':
         # Properly handle CORS preflight request
         response = jsonify()
@@ -164,6 +165,7 @@ def generate_questions():
 @app.route('/save-responses', methods=['POST', 'OPTIONS'])
 def save_responses():
     origin = request.headers.get('Origin')
+    print(origin)
     if request.method == 'OPTIONS':
         # Properly handle CORS preflight request
         response = jsonify()
@@ -200,6 +202,39 @@ def save_responses():
     if origin in ALLOWED_ORIGINS:
         response.headers.add('Access-Control-Allow-Origin', origin)
     return response, 200
+
+
+@app.route('/get_csv', methods=['GET', 'OPTIONS'])
+def get_csv():
+    origin = request.headers.get('Origin')
+
+    if request.method == 'OPTIONS':
+        # Handle CORS preflight request
+        response = jsonify()
+        if origin in ALLOWED_ORIGINS:
+            response.headers.add('Access-Control-Allow-Origin', origin)
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response, 200
+
+    if origin in ALLOWED_ORIGINS:
+        try:
+            with open('responses.csv', 'r') as file:
+                csv_data = file.read()
+            response = app.response_class(
+                response=csv_data,
+                status=200,
+                mimetype='text/csv'
+            )
+            response.headers['Content-Disposition'] = 'attachment; filename=responses.csv'
+            response.headers.add('Access-Control-Allow-Origin', origin)
+        except FileNotFoundError:
+            response = jsonify({"error": "File not found"}), 404
+    else:
+        response = jsonify({"error": "CORS policy does not allow access from this origin"}), 403
+
+    return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)

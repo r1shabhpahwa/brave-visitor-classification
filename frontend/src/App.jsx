@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import SearchSection from "./components/SearchSection";
 import NavBar from "./components/NavBar";
+import ErrorPopup from "./components/ErrorPopup";
 
 import "./index.css";
 
@@ -11,6 +12,7 @@ function App() {
         <>
           <NavBar/>
           <SearchSection/>
+          <ErrorPopup />
         </>
     </div>
   );

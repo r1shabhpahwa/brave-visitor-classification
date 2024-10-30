@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import images from '../../constants/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,16 +23,34 @@ const SearchSection = () => {
     const [url, setURL] = useState('');
     const [showQuestions, setShowQuestions] = useState(false);
     const [showSearch, setShowSearch] = useState(true);
-    const {loading} = useSelector(state => state.questions);
+    const { loading } = useSelector(state => state.questions);
     const questions = useSelector((state) => state.questions.questions);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [responses, setResponses] = useState([]);
     const [savingResponses, setSavingResponses] = useState(false);
 
+    const validateURL = (url) => {
+        const urlPattern = new RegExp(
+          '^(https?:\\/\\/)?' + // protocol
+          '((([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})|' + // domain name
+          'localhost|' + // localhost
+          '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})' + // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-zA-Z0-9%_.~+]*)*' + // port and path
+          '(\\?[;&a-zA-Z0-9%_.~+=-]*)?' + // query string
+          '(\\#[-a-zA-Z0-9_]*)?$', // fragment locator
+          'i'
+        );
+        return urlPattern.test(url);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!url.trim()) {
           dispatch(setError('Please enter a valid URL.'));
+          return;
+        }
+        if (!validateURL(url)) {
+          dispatch(setError('Invalid URL format. Please enter a valid URL.'));
           return;
         }
         dispatch(setLoading(true));
@@ -75,7 +93,7 @@ const SearchSection = () => {
             setShowSearch(true);
         }
     };
-  
+
     return (
         <section id="home" className="bg-white dark:bg-primary">
           <div className="container relative">

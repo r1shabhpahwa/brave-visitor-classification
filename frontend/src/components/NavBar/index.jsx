@@ -1,7 +1,9 @@
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect } from "react";
 import { MoonIcon, SunIcon } from "@heroicons/react/solid";
 import { motion } from "framer-motion";
 import useDarkMode from "../../hooks/useDarkMode";
+import { setQuestions, setLoading, setError } from '../../questionsSlice';
 
 const navlinks = [
   {
@@ -17,7 +19,7 @@ const navlinks = [
 export default function NavBar() {
   const [darkTheme, setDarkTheme] = useDarkMode();
   const handleMode = () => setDarkTheme(!darkTheme);
-
+  const dispatch = useDispatch();
   const [addBlur, setAddBlur] = useState(false);
 
   const addBlurScroll = () => {
@@ -35,6 +37,30 @@ export default function NavBar() {
     };
   }, []);
 
+  const handleGetCsv = async () => {
+    try {
+      const response = await fetch("https://brave-backend.p1xelhub.xyz/get_csv", {
+        method: "GET",
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "responses.csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        console.error("Failed to download CSV");
+        dispatch(setError('Failed to download CSV.'));
+      }
+    } catch (error) {
+      console.error("Error fetching CSV:", error);
+      dispatch(setError('Failed to fetch API'));
+    }
+  };
+
   return (
     <div
       className={` ${
@@ -49,7 +75,6 @@ export default function NavBar() {
         className="container"
       >
         <div className="flex justify-end items-center px-0 py-4 gap-4 sm:px-6 lg:py-8 lg:gap-10">
-          
           <nav className="hidden space-x-6 lg:flex lg:space-x-10">
             {navlinks.map((navlink) => (
               <a
@@ -64,6 +89,12 @@ export default function NavBar() {
                 {navlink.name}
               </a>
             ))}
+            <button
+              onClick={handleGetCsv}
+              className="text-base font-medium text-primary relative before:absolute before:-bottom-1 before:h-0.5 before:w-full before:scale-x-0 before:transition before:bg-primary hover:before:scale-x-100 dark:hover:text-neutral dark:text-white dark:before:bg-secondary"
+            >
+              Download Response
+            </button>
           </nav>
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}

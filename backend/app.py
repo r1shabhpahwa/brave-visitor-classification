@@ -13,12 +13,11 @@ from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/generate-questions": {"origins": "http://localhost:5173"},
-    r"/save-responses": {"origins": "http://localhost:5173"}
+    r"/generate-questions": {"origins": ["http://localhost:5173", "https://brave.p1xelhub.xyz"]},
+    r"/save-responses": {"origins": ["http://localhost:5173", "https://brave.p1xelhub.xyz"]}
 },
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"])
-
 
 app = Flask(__name__)
 

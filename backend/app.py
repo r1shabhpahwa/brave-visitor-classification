@@ -78,7 +78,7 @@ def generate_questions_with_ai(keywords):
     prompt = (
         "The following keywords were extracted from the website content to help you understand the context of the website:\n"
         f"{', '.join([kw[0] for kw in keywords])}\n\n"
-        "Create three straightforward multiple-choice questions to categorize visitors by industry or interest. "
+        "Create four straightforward multiple-choice questions to categorize visitors by industry or interest. "
         "Make sure the questions are simple and the options are short and concise. "
         "Each question should include four answer choices (a, b, c, d) that represent different user profiles. "
         "Format the response as follows:\n"

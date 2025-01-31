@@ -1,5 +1,12 @@
-# Project Overview
-Todo
+# 🚀 Website Visitor Classifier
+
+This project is a web-based tool that takes a website URL as input, scrapes its content, and intelligently classifies visitors based on their interests or industry. It dynamically generates questions and multiple-choice options to categorize users, providing valuable insights for businesses and site owners.
+
+Features:
+- Web Scraping – Extracts key content from the given website URL
+- User Classification – Categorizes visitors based on interests/industry
+- Dynamic Question Generation – Generates tailored multiple-choice questions
+- Full-Stack Implementation – Integrates both frontend and backend components
 
 ## Setup Instructions
 ### Prerequisites
